@@ -32,6 +32,7 @@ The following image represents the class diagram that should be considered durin
 4. Display all possible paths to chosen category. 
 
 ## Submission
-Clone this repository, create your own branch and make a pull request to master when you're done. 
+Fork this repository, prepare your solution and make a pull request when you're done.
+Don't forget to write docs :)
 
 ## Good luck!
