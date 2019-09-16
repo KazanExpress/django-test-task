@@ -23,7 +23,8 @@ The following image represents the class diagram that should be considered durin
 4. First image should be displayed as main image in both list view and product view.
 5. Sort products in product list by number of orders and by price.
 6. Filter list of products by active flag.
-7. Attach product to one or more categories.
+7. Filter by price range.
+8. Attach product to one or more categories.
 
 ### Category admin
 1. Navigate through categories list.
