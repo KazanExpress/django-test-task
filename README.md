@@ -32,6 +32,11 @@ The following image represents the class diagram that should be considered durin
 3. Add one or more parent categories. 
 4. Display all possible paths to chosen category. 
 
+### Management
+There should be at least two administrative roles for the following purposes:
+1. Moderation for products. 
+2. Moderation of all available pages. 
+
 ## Submission
 Fork this repository, prepare your solution and make a pull request when you're done.
 Don't forget to write docs :)
