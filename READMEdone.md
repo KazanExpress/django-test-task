@@ -32,4 +32,8 @@ Add/Delete/Change/View products and products’ images and View on categories
 
 For all page moderator they are:
 
-Add/Delete/Change/View on Shops, Products, Categories, Products’ images
+Add/Delete/Change/View on Shops, Products, Categories, Products’ 
+
+
+
+TODO: Forgot to add Product -> Shop dependency 
