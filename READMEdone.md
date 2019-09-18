@@ -1,44 +1,35 @@
-# KazanExpress test for Python developer 
-Here lies the description and requirements of the test task for Python/Django Developer position applicants.
+# Setup 
+To setup database - there is the psql.yml file for docker-compose within psql.env for environement variables
 
-## Task goal
-The goal of this test task is to develop a simple Django admin panel which purpose is to manage the content for an online store and to have multi-role support. 
+All necessary libraries are in 'requirements.txt'
 
-## Domain description
-The following image represents the class diagram that should be considered during development of your admin panel. This is the minimal requirements for classes and fields that we are expecting from you to add. You can make your own updates and add additional functional. All images fields should be represented as links on images. You are free to use any database, which seems suitable for you and for the project. 
+Do not forget to run:
 
-![Class diagram](https://hb.bizmrg.com/kazanexpress/class_diagram.png)
+python manage.py collectstatic
+python manage.py migrate
 
-## Requirements
-### Shop admin
-1. Navigate through the shops list.
-2. Make a search by title.
-3. Edit everything except shop id.
-4. Upload image as shop pic. 
+# Shop administration
 
-### Product admin
-1. Navigate through product list.
-2. Search by id or product title.
-3. Edit everything except product id.
-4. First image should be displayed as main image in both list view and product view.
-5. Sort products in product list by number of orders and by price.
-6. Filter list of products by active flag.
-7. Filter by price range.
-8. Attach product to one or more categories.
+All shops are listed in /admin/shops/shop/, there are possibility to search through the shops by title in the search box above list.
 
-### Category admin
-1. Navigate through categories list.
-2. Search by product id, title and parent category.
-3. Add one or more parent categories. 
-4. Display all possible paths to chosen category. 
+Administrator is able to set an ID of shop during adding, but is not able to do it during shop editing. Also there is a possibility to upload file for shop as image thumbnail which is displayed on editing page.
 
-### Management
-There should be at least two administrative roles for the following purposes:
-1. Moderation for products. 
-2. Moderation of all available pages. 
+# Product administration 
 
-## Submission
-Fork this repository, prepare your solution and make a pull request when you're done.
-Don't forget to write docs :)
+All products are listed in /admin/products/product, you can search products by ID or title, order them by clicking price or amount columns. Also there is a filter by range of price. On edit page you are able to fix all information except ID. You can assign or unset categories to a product by clicking ‘control’ button (butterfly button on MacBook) in correspondent field. You can add many images of product.
 
-## Good luck!
+# Category administration 
+
+Categories are listed in /admin/products/category, you can search categories by title and product id in search box and by parent categories in filter window with dropdown list. On edit page all possible paths to the category are listed.
+
+# Management 
+
+Management things can be implemented using default Django tool such as groups. You can assign rights to group and during user creating assign groups to the user. 
+
+For product moderator rights should be:
+
+Add/Delete/Change/View products and products’ images and View on categories
+
+For all page moderator they are:
+
+Add/Delete/Change/View on Shops, Products, Categories, Products’ images
