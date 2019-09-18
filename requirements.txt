@@ -1,0 +1,4 @@
+django>=2.1
+psycopg2
+Pillow
+django-jet
