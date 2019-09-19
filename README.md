@@ -11,7 +11,7 @@ The goal of this test task is to develop a simple Django admin panel which purpo
 1. Docker
 ## Launching the project
 1. Clone the repository
-2. docker-compose up
+2. `docker-compose up --build`
 3. The admin panel will be at http://127.0.0.1:8080/admin/
 4. Log in
     -  There are three users in the database: admin, director and manager.
