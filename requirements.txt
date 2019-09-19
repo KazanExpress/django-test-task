@@ -1,0 +1,8 @@
+Django==2.2.5
+django-admin-list-filter-dropdown==1.0.2
+django-admin-numeric-filter==0.1.5
+docutils==0.15.2
+Pillow==6.1.0
+psycopg2==2.8.3
+pytz==2019.2
+sqlparse==0.3.0
