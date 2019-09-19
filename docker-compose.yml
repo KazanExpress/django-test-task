@@ -1,7 +1,9 @@
 version: '3'
 services:
   db:
-    image: postgres
+    image: postgres:latest
+    volumes:
+      - ./backups/dump.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: db
@@ -10,10 +12,13 @@ services:
       - "5432:5432"
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: bash -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    restart: on-failure
     volumes:
       - .:/code
     ports:
       - "8080:8000"
     depends_on:
       - db
+volumes:
+  backups:

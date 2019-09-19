@@ -73,9 +73,10 @@ WSGI_APPLICATION = 'test_kazanexpress.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'db',
         'USER': 'postgres',
-        'HOST': os.environ.get("db_host", 'db'),
+        'PASSWORD': 'postgres',
+        'HOST': '0.0.0.0',
         'PORT': 5432,
     }
 }

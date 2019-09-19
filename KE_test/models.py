@@ -3,6 +3,8 @@ from django.db import models
 
 # Create your models here.
 
+# TODO:сделать id лонгами?
+
 
 class Shop(models.Model):
     title = models.CharField(max_length=255)
@@ -23,10 +25,14 @@ class Product(models.Model):
     amount = models.IntegerField()
     price = models.FloatField()
 
-    # as can be understood from the task, product is duplicated for different shops i.e.
-    # if there is a product "sock" in two shops, it would be two entities
-    # => models.CASCADE
+    # the minimal requirements say that amount, price and images should be in
+    # "Product" table, so I guess I'm not able to change that.
+    # However, if I could, I would make a separate "ProductShop", which would have
+    # shop_id, product_id, amount and price.
+    # It would lead to less data duplication (because product name, description and images
+    # probably don't change from shop to shop, but amount and price do.)
     shop = models.ForeignKey("Shop", on_delete=models.CASCADE)
+
     category = models.ManyToManyField(
         "Category", related_name="categories", verbose_name="category"
     )
