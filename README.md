@@ -27,6 +27,8 @@ The goal of this test task is to develop a simple Django admin panel which purpo
       - Can only moderate products.
       - Login: manager
       - Password: manager
+      
+(for convenience of the )
 
 ## Packages used
 1. Django
