@@ -6,10 +6,6 @@ from jet.admin import CompactInline
 from KE_test.models import ProductImage, Product, Category
 
 
-# TODO:
-# Filter by price range.
-
-
 class RecursiveSubcategoryListFilter(SimpleListFilter):
     """
     Given a category to search products in, searches also in subcategories of the category.
