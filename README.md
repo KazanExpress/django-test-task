@@ -28,7 +28,7 @@ The goal of this test task is to develop a simple Django admin panel which purpo
       - Login: manager
       - Password: manager
       
-(for convenience of the )
+(for convenience of the checker, the test database (created by me) is restored on first `docker-compose up` call)
 
 ## Packages used
 1. Django
