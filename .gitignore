@@ -20,6 +20,14 @@ var/
 .installed.cfg
 *.egg
 
+# IDE directories and files
+*.iml
+*.iws
+*.ipr
+.idea/
+.vscode/
+
+
 ### Django ###
 *.log
 *.pot
