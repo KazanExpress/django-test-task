@@ -5,7 +5,7 @@ Here lies the solution to the test task for Python/Django Developer position app
 The goal of this test task is to develop a simple Django admin panel which purpose is to manage the content for an online store and to have multi-role support. 
 
 ## DB schema
-![Class diagram](https://i.ibb.co/MC3wF6n/Diagram.png)
+![Class diagram](https://i.imgur.com/RMGTq9h.png)
 
 ## Prerequisites
 1. Docker
