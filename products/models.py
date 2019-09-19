@@ -29,6 +29,7 @@ class Product(models.Model):
     price = models.fields.FloatField(verbose_name=_('Price'))
     categories = models.ManyToManyField('Category', verbose_name=_('Categories of product'))
     active = models.BooleanField(default=True, verbose_name=_('Active'))
+    shop = models.ForeignKey('shops.Shop', on_delete=models.CASCADE, verbose_name=_('Shop'), related_name=_('Products'))
 
     def __str__(self):
         return f'{self.title} - {self.id}'

@@ -28,12 +28,8 @@ Management things can be implemented using default Django tool such as groups. Y
 
 For product moderator rights should be:
 
-Add/Delete/Change/View products and products’ images and View on categories
+Add/Delete/Change/View products and products’ images and View on categories and shops
 
 For all page moderator they are:
 
 Add/Delete/Change/View on Shops, Products, Categories, Products’ 
-
-
-
-TODO: Forgot to add Product -> Shop dependency 
