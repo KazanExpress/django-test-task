@@ -1,0 +1,5 @@
+.idea/
+interpreter/
+staticfiles/
+Pipfile
+Pipfile.lock
