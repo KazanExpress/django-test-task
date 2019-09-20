@@ -1,5 +1,5 @@
 # KazanExpress test for Python developer 
-Here lies the _description_ and requirements of the test task for Python/Django Developer position applicants.
+Here lies the solution to the test task for Python/Django Developer position applicants.
 
 ## Task goal
 The goal of this test task is to develop a simple Django admin panel which purpose is to manage the content for an online store and to have multi-role support. 
@@ -30,6 +30,7 @@ pip install virtualenv
 virtualenv env
 /env/Scripts/activate
 pip install -r requirements.txt
+python manage.py makemigrations
 python manage.py migrate
 python manage.py loaddata auth
 pyhton manage.py runsever 
