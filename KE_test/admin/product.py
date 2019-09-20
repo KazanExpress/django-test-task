@@ -3,6 +3,7 @@ from django.contrib.admin import SimpleListFilter
 from django.utils.safestring import mark_safe
 from jet.admin import CompactInline
 
+
 from KE_test.models import ProductImage, Product, Category
 
 
@@ -80,7 +81,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = (ImagesInline,)
     search_fields = ("id", "title")
 
-    list_display = ("title", "list_image")
+    list_display = ("title", "price", "orders", "list_image")
     readonly_fields = ("product_image",)
 
     # by default everything is editable except for id
