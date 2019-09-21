@@ -1,0 +1,5 @@
+- set-up PSQL
+- meet the requirements
+- ElasticSearch (probably, via dsl)
+- RabbitMQ + Celery
+- add PDF download for the celected items in `Shop` and `Product`
