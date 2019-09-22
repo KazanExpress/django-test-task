@@ -10,7 +10,3 @@ __pycache__/
 # Python's virtual environemnt...
 venv/
 .venv
-
-# PyCharm's FileEnv...
-env/
-*.env
