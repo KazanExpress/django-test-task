@@ -1,0 +1,12 @@
+# PyCharm...
+*.pyc
+.idea
+
+# Byte-compiled / optimized / DLL files...
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python's virtual environemnt...
+venv/
+.venv
