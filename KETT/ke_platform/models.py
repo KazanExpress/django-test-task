@@ -1,7 +1,7 @@
 from typing import Dict
 
 from django.db.models import Model, CharField, TextField, IntegerField, FloatField, BooleanField, ImageField, \
-    ManyToManyField, ForeignKey, CASCADE
+    ManyToManyField, ForeignKey, CASCADE, SET_NULL
 from django.utils.safestring import mark_safe, SafeText
 
 
@@ -31,8 +31,10 @@ class Product(Model):
     price = FloatField(default=0.0)
     orders_num = IntegerField(default=0)
     active = BooleanField()
-    categories = ManyToManyField(to='Category', related_name='products',
-                                 related_query_name='product', symmetrical=False, )
+    categories = ManyToManyField(to='Category', related_name='products', related_query_name='product',
+                                 symmetrical=False)
+    shop = ForeignKey(to='Shop', on_delete=SET_NULL, related_name='products', related_query_name='product', null=True,
+                      blank=True)
 
     def __str__(self):
         return self.title
@@ -47,7 +49,7 @@ class ProductImage(Model):
     """
     For Many-to-One Product-Images support...
     """
-    product_ref = ForeignKey(to='Product', related_name='images', related_query_name='image', on_delete=CASCADE)
+    product_ref = ForeignKey(to='Product', on_delete=CASCADE, related_name='images', related_query_name='image')
     image = ImageField(null=True, blank=True, upload_to='product_imgs')
 
 
