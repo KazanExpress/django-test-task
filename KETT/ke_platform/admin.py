@@ -1,8 +1,27 @@
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin, TabularInline
+from django.contrib.admin import ModelAdmin, TabularInline, SimpleListFilter, BooleanFieldListFilter
 from django.utils.safestring import mark_safe, SafeText
 
 from .models import Shop, Product, Category, ProductImage
+
+
+class IsVeryBenevolentFilter(SimpleListFilter):
+    title = 'is_very_benevolent'
+    parameter_name = 'is_very_benevolent'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Yes', 'Yes'),
+            ('No', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == 'Yes':
+            return queryset.filter(benevolence_factor__gt=75)
+        elif value == 'No':
+            return queryset.exclude(benevolence_factor__gt=75)
+        return queryset
 
 
 class ProductImageInline(TabularInline):
@@ -24,10 +43,10 @@ class ProductImageInline(TabularInline):
 @admin.register(Shop)
 class ShopAdmin(ModelAdmin):
     """
-    ✓ Navigate through the shops list.
-    ✓ Make a search by title.
-    ✓ Edit everything except shop id.
-    ✓ Upload image as shop pic.
+    ✓ Navigates through the shops list...
+    ✓ Makes a search by `title`...
+    ✓ Edits everything except shop's `id`...
+    ✓ Uploads an image as shop's picture...
     """
     search_fields = ('title',)
     list_display = ('id', 'title', 'description')
@@ -46,17 +65,20 @@ class ShopAdmin(ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(ModelAdmin):
     """
-    ✓ Navigate through product list.
-    ✓ Search by id or product title.
-    ✓ Edit everything except product id.
-    4. First image should be displayed as main image in both list view and product view.
-    5. Sort products in product list by number of orders and by price.
-    6. Filter list of products by active flag.
-    7. Filter by price range.
-    ✓ Attach product to one or more categories.
+    ✓ Navigates through the products list...
+    ✓ Searches by `id` and product's `title`...
+    ✓ Edits everything except for product's `id`...
+    4.* First image is displayed as a main image in both list view and product view...
+    5. Sorts products in the products list by the `number of orders` and `price`...
+    ✓ Filters list of the products by `active` flag...
+    7. Filters by a `price` range...
+    ✓ Attaches a product to one or more `categories`...
     """
     search_fields = ('id', 'title')
     list_display = ('id', 'title', 'description', 'get_categories', 'amount')
+    list_filter = (
+        ('active', BooleanFieldListFilter),
+    )
     empty_value_display = 'NA'
 
     inlines = [ProductImageInline]
