@@ -78,9 +78,9 @@ class Category(Model):
             'parents': self.parent_category.all()
         }
 
-    def dfs_paths(self, origin: 'Category'):
+    def get_paths_dfs(self, origin: 'Category'):
         """
-        Deep-first search over `CATEGORIES_GRAPH`...
+        Depth-First Search over `CATEGORIES_GRAPH`...
         Generator-like method...
         :param origin: Starting Category-node
         :return: 
@@ -88,9 +88,7 @@ class Category(Model):
         stack = [(origin, [origin])]
         while stack:
             (vertex, path) = stack.pop()
-            sa = set(CATEGORIES_GRAPH[vertex]['parents'])
-            new_ss = sa - set(path)
-            for next in new_ss:
+            for next in set(CATEGORIES_GRAPH[vertex]['parents']) - set(path):
                 if not next.parent_category.all():
                     yield path + [next]
                 else:
@@ -101,22 +99,22 @@ class Category(Model):
         Iterates (DFS) over categories to extract the full hierarchy for the current category...
         :return: Stringified version of the extracted paths...
         """
-        self._refresh_graph()
+        def _refresh_graph() -> None:
+            """
+            Refreshes `CATEGORIES_GRAPH`, iterating over all the objects...
+            :return: Nothing...
+            """
+            global CATEGORIES_GRAPH
+            CATEGORIES_GRAPH = {}
 
-        paths_data = list(self.dfs_paths(self))
-        paths = ['.'.join(ss.title for ss in path_data) for path_data in paths_data]
-        return mark_safe(f'<br>'.join(paths))
+            for cat in Category.objects.all():
+                CATEGORIES_GRAPH[cat] = cat.as_dict
+        _refresh_graph()
 
-    def _refresh_graph(self) -> None:
-        """
-        Refreshes `CATEGORIES_GRAPH`, iterating over all the objects...
-        :return: Nothing...
-        """
-        global CATEGORIES_GRAPH
-        CATEGORIES_GRAPH = {}
+        paths_data = list(self.get_paths_dfs(self))
+        paths = ['.'.join(category.title for category in categories) for categories in paths_data]
 
-        for cat in Category.objects.all():
-            CATEGORIES_GRAPH[cat] = cat.as_dict
+        return mark_safe(f"<br>".join(paths))
 
     class Meta:
         db_table = 'categories'

@@ -8,19 +8,26 @@ from django.utils.safestring import mark_safe, SafeText
 from .models import Shop, Product, Category, ProductImage
 
 
+IMG_DEFAULT_WIDTH = 128
+IMG_DEFAULT_HEIGHT = 128
+
+
 class ProductImageInline(TabularInline):
+    """
+    For multiple images input support...
+    """
     model = ProductImage
     extra = 3
     readonly_fields = ['get_thumbnail']
 
     def get_thumbnail(self, obj) -> SafeText:
         """
-
+        Taking ProductImage object, transforms it into a safe [string] HTML-snippet...
         :param obj:
-        :return:
+        :return: HTML-snippet with the image...
         """
-        thumb_width = 128 if obj.image.width > 128 else obj.image.width
-        thumb_height = 128 if obj.image.height > 128 else obj.image.height
+        thumb_width = IMG_DEFAULT_WIDTH if obj.image.width > IMG_DEFAULT_WIDTH else obj.image.width
+        thumb_height = IMG_DEFAULT_HEIGHT if obj.image.height > IMG_DEFAULT_HEIGHT else obj.image.height
         return mark_safe(f'<img src="{obj.image.url}" width="{thumb_width}" height="{thumb_height}"/>')
     get_thumbnail.short_description = 'Thumbnail'
 
@@ -89,9 +96,9 @@ class ProductAdmin(ModelAdmin):
         first_img = ProductImage.objects.filter(product_ref_id=obj.id).first()
         if not first_img:
             return None
-        thumb_width = 128 if first_img.image.width > 128 else first_img.image.width
-        thumb_height = 128 if first_img.image.height > 128 else first_img.image.height
-        return mark_safe(f'<img src="{first_img.image.url}" width="{thumb_width}" height="{thumb_height}"/>')
+        thumb_width = IMG_DEFAULT_WIDTH if first_img.image.width > IMG_DEFAULT_WIDTH else first_img.image.width
+        thumb_height = IMG_DEFAULT_HEIGHT if first_img.image.height > IMG_DEFAULT_HEIGHT else first_img.image.height
+        return mark_safe(f"<img src=\"{first_img.image.url}\" width=\"{thumb_width}\" height=\"{thumb_height}\"/>")
     get_first_img.short_description = 'Cover'
 
     def has_add_permission(self, request, obj=None):
@@ -117,7 +124,7 @@ class CategoryAdmin(ModelAdmin):
     empty_value_display = 'NA'
 
     def get_parent_categories(self, obj) -> SafeText:
-        return mark_safe(', '.join([category.title for category in obj.parent_category.all()]))
+        return mark_safe(", ".join([category.title for category in obj.parent_category.all()]))
 
     def has_add_permission(self, request, obj=None):
         return True
