@@ -28,10 +28,18 @@ class ShopAdmin(ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(ModelAdmin):
     search_fields = ('id', 'title')
-    list_display = ('id', 'title', 'description', 'amount')
+    list_display = ('id', 'title', 'description', 'get_categories', 'amount')
     empty_value_display = 'NA'
 
     inlines = [ProductImageInline]
+
+    def get_categories(self, obj) -> str:
+        """
+
+        :param obj:
+        :return:
+        """
+        return ", ".join([category.title for category in obj.categories.all()])
 
     def has_add_permission(self, request, obj=None):
         return True
@@ -45,7 +53,7 @@ class ProductAdmin(ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
-    search_fields = ('id', 'title', 'parents')
+    search_fields = ('product__id', 'title', 'parents')
     list_display = ('id', 'title')
     empty_value_display = 'NA'
 
