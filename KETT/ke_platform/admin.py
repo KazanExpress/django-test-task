@@ -66,8 +66,11 @@ class ProductAdmin(ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
     search_fields = ('product__id', 'title', 'parents')
-    list_display = ('id', 'title')
+    list_display = ('id', 'title', 'get_parent_categories')
     empty_value_display = 'NA'
+
+    def get_parent_categories(self, obj) -> SafeText:
+        return mark_safe(', '.join([category.title for category in obj.parent_category.all()]))
 
     def has_add_permission(self, request, obj=None):
         return True

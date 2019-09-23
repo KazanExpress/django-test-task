@@ -51,7 +51,7 @@ class Category(Model):
     """
     title = CharField(max_length=126)
     description = TextField()
-    parent_category = ManyToManyField(to='self', default=None, blank=True, related_name='parents',
+    parent_category = ManyToManyField(to='self', blank=True, related_name='parents',
                                       related_query_name='parents', symmetrical=False,
                                       verbose_name='Parent Categories')
 
