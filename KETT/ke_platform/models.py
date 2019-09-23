@@ -44,9 +44,6 @@ class ProductImage(Model):
     product_ref = ForeignKey(to='Product', related_name='Images', related_query_name='images', on_delete=CASCADE)
     image = ImageField(null=True, blank=True, upload_to='product_imgs')
 
-    def thumbnail(self, obj):
-        return mark_safe(f'<img src="{self.image.url}" width="{obj.width}" height="{obj.height}"/>')
-
 
 class Category(Model):
     """

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin, TabularInline
+from django.utils.safestring import mark_safe, SafeText
 
 from .models import Shop, Product, Category, ProductImage
 
@@ -7,6 +8,17 @@ from .models import Shop, Product, Category, ProductImage
 class ProductImageInline(TabularInline):
     model = ProductImage
     extra = 3
+    readonly_fields = ['thumbnail']
+
+    def thumbnail(self, obj) -> SafeText:
+        """
+
+        :param obj:
+        :return:
+        """
+        thumb_width = 128 if obj.image.width > 128 else obj.image.width
+        thumb_height = 128 if obj.image.height> 128 else obj.image.height
+        return mark_safe(f'<img src="{obj.image.url}" width="{thumb_width}" height="{thumb_height}"/>')
 
 
 @admin.register(Shop)
@@ -33,13 +45,13 @@ class ProductAdmin(ModelAdmin):
 
     inlines = [ProductImageInline]
 
-    def get_categories(self, obj) -> str:
+    def get_categories(self, obj) -> SafeText:
         """
 
         :param obj:
         :return:
         """
-        return ", ".join([category.title for category in obj.categories.all()])
+        return mark_safe(", ".join([category.title for category in obj.categories.all()]))
 
     def has_add_permission(self, request, obj=None):
         return True
