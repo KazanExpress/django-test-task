@@ -23,6 +23,8 @@ ALLOWED_HOSTS = ['localhost']
 INSTALLED_APPS = [
     'KETT.ke_platform.apps.KePlatformConfig',
 
+    'admin_numeric_filter',
+
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',

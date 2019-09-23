@@ -1,27 +1,9 @@
+from admin_numeric_filter.admin import RangeNumericFilter
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin, TabularInline, SimpleListFilter, BooleanFieldListFilter
+from django.contrib.admin import ModelAdmin, TabularInline, BooleanFieldListFilter
 from django.utils.safestring import mark_safe, SafeText
 
 from .models import Shop, Product, Category, ProductImage
-
-
-class IsVeryBenevolentFilter(SimpleListFilter):
-    title = 'is_very_benevolent'
-    parameter_name = 'is_very_benevolent'
-
-    def lookups(self, request, model_admin):
-        return (
-            ('Yes', 'Yes'),
-            ('No', 'No'),
-        )
-
-    def queryset(self, request, queryset):
-        value = self.value()
-        if value == 'Yes':
-            return queryset.filter(benevolence_factor__gt=75)
-        elif value == 'No':
-            return queryset.exclude(benevolence_factor__gt=75)
-        return queryset
 
 
 class ProductImageInline(TabularInline):
@@ -69,15 +51,16 @@ class ProductAdmin(ModelAdmin):
     ✓ Searches by `id` and product's `title`...
     ✓ Edits everything except for product's `id`...
     4.* First image is displayed as a main image in both list view and product view...
-    5. Sorts products in the products list by the `number of orders` and `price`...
+    5. Sorts products in the products list by the `number of orders` or `price`...
     ✓ Filters list of the products by `active` flag...
     7. Filters by a `price` range...
     ✓ Attaches a product to one or more `categories`...
     """
     search_fields = ('id', 'title')
-    list_display = ('id', 'title', 'description', 'get_categories', 'amount')
+    list_display = ('id', 'title', 'description', 'price', 'get_categories', 'amount')
     list_filter = (
         ('active', BooleanFieldListFilter),
+        ('price', RangeNumericFilter)
     )
     empty_value_display = 'NA'
 

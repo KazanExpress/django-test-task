@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict
+from typing import Dict
 
 from django.db.models import Model, CharField, TextField, IntegerField, FloatField, BooleanField, ImageField, \
     ManyToManyField, ForeignKey, CASCADE
@@ -43,11 +43,15 @@ class Product(Model):
 
 
 class ProductImage(Model):
+    """
+    For Many-to-One Product-Images support...
+    """
     product_ref = ForeignKey(to='Product', related_name='images', related_query_name='image', on_delete=CASCADE)
     image = ImageField(null=True, blank=True, upload_to='product_imgs')
 
 
 # For constant paths retrieval...
+# TODO: Use Memcached or Redis instead, while updating the graph upon changes in either ORM or DB...
 CATEGORIES_GRAPH = {}
 
 
@@ -102,11 +106,12 @@ class Category(Model):
 
     def _refresh_graph(self) -> None:
         """
-        Refreshes `CATEGORIES_GRAPH`...
+        Refreshes `CATEGORIES_GRAPH`, iterating over all the objects...
         :return: Nothing...
         """
         global CATEGORIES_GRAPH
         CATEGORIES_GRAPH = {}
+
         for cat in Category.objects.all():
             CATEGORIES_GRAPH[cat] = cat.as_dict
 
