@@ -23,6 +23,12 @@ class ProductImageInline(TabularInline):
 
 @admin.register(Shop)
 class ShopAdmin(ModelAdmin):
+    """
+    ✓ Navigate through the shops list.
+    ✓ Make a search by title.
+    ✓ Edit everything except shop id.
+    ✓ Upload image as shop pic.
+    """
     search_fields = ('title',)
     list_display = ('id', 'title', 'description')
     empty_value_display = 'NA'
@@ -39,6 +45,16 @@ class ShopAdmin(ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(ModelAdmin):
+    """
+    ✓ Navigate through product list.
+    ✓ Search by id or product title.
+    ✓ Edit everything except product id.
+    4. First image should be displayed as main image in both list view and product view.
+    5. Sort products in product list by number of orders and by price.
+    6. Filter list of products by active flag.
+    7. Filter by price range.
+    ✓ Attach product to one or more categories.
+    """
     search_fields = ('id', 'title')
     list_display = ('id', 'title', 'description', 'get_categories', 'amount')
     empty_value_display = 'NA'
@@ -65,8 +81,14 @@ class ProductAdmin(ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
+    """
+    ✓ Navigate through categories list.
+    2. Search by product id, title and parent category.
+    ✓ Add one or more parent categories.
+    ✓ Display all possible paths to chosen category.
+    """
     search_fields = ('product__id', 'title', 'parents')
-    list_display = ('id', 'title', 'get_parent_categories')
+    list_display = ('id', 'title', 'get_parent_categories', 'get_paths')
     empty_value_display = 'NA'
 
     def get_parent_categories(self, obj) -> SafeText:
