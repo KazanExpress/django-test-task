@@ -27,8 +27,9 @@ class Product(Model):
     """
     title = CharField(max_length=126)
     description = TextField(validators=())
-    amount = IntegerField()
-    price = FloatField()
+    amount = IntegerField(default=0)
+    price = FloatField(default=0.0)
+    orders_num = IntegerField(default=0)
     active = BooleanField()
     categories = ManyToManyField(to='Category', related_name='products',
                                  related_query_name='product', symmetrical=False, )
