@@ -17,7 +17,8 @@ class Shop(Model):
 
     class Meta:
         db_table = 'shops'
-        verbose_name = 'Shop'
+        verbose_name = "Shop"
+        verbose_name_plural = "Shops"
 
     def __str__(self):
         return self.title

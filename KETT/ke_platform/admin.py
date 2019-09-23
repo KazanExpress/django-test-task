@@ -42,7 +42,7 @@ class ShopAdmin(ModelAdmin):
     """
     search_fields = ('title',)
     list_display = ('id', 'title', 'description')
-    empty_value_display = 'NA'
+    empty_value_display = "NA"
 
     def has_add_permission(self, request, obj=None):
         return True
@@ -75,15 +75,15 @@ class ProductAdmin(ModelAdmin):
         ('price', RangeNumericFilter)
     )
     ordering = ('price', 'orders_num')
-    empty_value_display = 'NA'
+    empty_value_display = "NA"
 
     inlines = [ProductImageInline]
 
     def get_categories(self, obj) -> SafeText:
         """
-        Retrieves parent categories and transforms them into a safe string (comma-separated)...
+        Retrieves parent categories and transforms them into a safe string...
         :param obj:
-        :return:
+        :return: A comma-separated safe string with the retrieved product's categories...
         """
         categories_titles = [category.title for category in obj.categories.all()]
         return mark_safe(", ".join(categories_titles))
@@ -104,7 +104,15 @@ class ProductAdmin(ModelAdmin):
     get_first_img.short_description = "Cover"
 
     def get_shops(self, obj) -> Optional[SafeText]:
+        """
+        Tries to retrieve all the shops where the product is available as a safe string...
+        :param obj:
+        :return: Either a comma-separated safe string with the retrieved shops' titles
+                 or None if there are no images in the field...
+        """
         shops_titles = [category.title for category in obj.shops.all()]
+        if not shops_titles:
+            return None
         return mark_safe(", ".join(shops_titles))
     get_shops.short_description = "Available Shops"
 
@@ -121,16 +129,25 @@ class ProductAdmin(ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
     """
-    ✓ Navigate through categories list.
-    ✓ Search by product id, title and parent category.
-    ✓ Add one or more parent categories.
-    ✓ Display all possible paths to chosen category.
+    ✓ Navigates through the categories list....
+    ✓ Searches by product `id`, `title`, and `parent category`...
+    ✓ Adds one or more `parent categories`...
+    ✓ Displays all possible paths to the chosen category...
     """
     search_fields = ('product__id', 'title', 'parent_category__title')
     list_display = ('id', 'title', 'get_parent_categories', 'get_paths')
-    empty_value_display = 'NA'
+    empty_value_display = "NA"
 
-    def get_parent_categories(self, obj) -> SafeText:
+    def get_parent_categories(self, obj) -> Optional[SafeText]:
+        """
+        Tries to retrieve all the category's parents
+        :param obj:
+        :return: Either a comma-separated safe string with the retrieved category parents' titles
+                 or None if there are none of them...
+        """
+        parent_categories_titles = [category.title for category in obj.parent_category.all()]
+        if not parent_categories_titles:
+            return None
         return mark_safe(", ".join([category.title for category in obj.parent_category.all()]))
     get_parent_categories.short_description = "Parents"
 
