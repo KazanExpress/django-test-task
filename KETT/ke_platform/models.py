@@ -30,8 +30,8 @@ class Product(Model):
     amount = IntegerField()
     price = FloatField()
     active = BooleanField()
-    categories = ManyToManyField(to='Category', related_name='product_categories',
-                                 related_query_name='product_categories', symmetrical=False, )
+    categories = ManyToManyField(to='Category', related_name='products',
+                                 related_query_name='product', symmetrical=False, )
 
     def __str__(self):
         return self.title
@@ -43,7 +43,7 @@ class Product(Model):
 
 
 class ProductImage(Model):
-    product_ref = ForeignKey(to='Product', related_name='Images', related_query_name='images', on_delete=CASCADE)
+    product_ref = ForeignKey(to='Product', related_name='images', related_query_name='image', on_delete=CASCADE)
     image = ImageField(null=True, blank=True, upload_to='product_imgs')
 
 
@@ -57,7 +57,7 @@ class Category(Model):
     """
     title = CharField(max_length=126)
     description = TextField()
-    parent_category = ManyToManyField(to='self', blank=True, related_name='parents', related_query_name='parents',
+    parent_category = ManyToManyField(to='self', blank=True, related_name='children', related_query_name='child',
                                       symmetrical=False, verbose_name='Parent Categories')
 
     def __str__(self):

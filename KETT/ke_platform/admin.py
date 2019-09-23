@@ -83,11 +83,11 @@ class ProductAdmin(ModelAdmin):
 class CategoryAdmin(ModelAdmin):
     """
     ✓ Navigate through categories list.
-    2. Search by product id, title and parent category.
+    ✓ Search by product id, title and parent category.
     ✓ Add one or more parent categories.
     ✓ Display all possible paths to chosen category.
     """
-    search_fields = ('product__id', 'title', 'parents')
+    search_fields = ('product__id', 'title', 'parent_category__title')
     list_display = ('id', 'title', 'get_parent_categories', 'get_paths')
     empty_value_display = 'NA'
 
