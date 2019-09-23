@@ -1,3 +1,5 @@
+from typing import Optional
+
 from admin_numeric_filter.admin import RangeNumericFilter
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin, TabularInline, BooleanFieldListFilter
@@ -9,17 +11,18 @@ from .models import Shop, Product, Category, ProductImage
 class ProductImageInline(TabularInline):
     model = ProductImage
     extra = 3
-    readonly_fields = ['thumbnail']
+    readonly_fields = ['get_thumbnail']
 
-    def thumbnail(self, obj) -> SafeText:
+    def get_thumbnail(self, obj) -> SafeText:
         """
 
         :param obj:
         :return:
         """
         thumb_width = 128 if obj.image.width > 128 else obj.image.width
-        thumb_height = 128 if obj.image.height> 128 else obj.image.height
+        thumb_height = 128 if obj.image.height > 128 else obj.image.height
         return mark_safe(f'<img src="{obj.image.url}" width="{thumb_width}" height="{thumb_height}"/>')
+    get_thumbnail.short_description = 'Thumbnail'
 
 
 @admin.register(Shop)
@@ -50,14 +53,15 @@ class ProductAdmin(ModelAdmin):
     ✓ Navigates through the products list...
     ✓ Searches by `id` and product's `title`...
     ✓ Edits everything except for product's `id`...
-    4.* First image is displayed as a main image in both list view and product view...
+    ✓ First image is displayed as a main image in both list view and product view...
     ✓ Sorts products in the products list by the `number of orders` and `price`...
     ✓ Filters list of the products by `active` flag...
     ✓ Filters by a `price` range...
     ✓ Attaches a product to one or more `categories`...
     """
     search_fields = ('id', 'title')
-    list_display = ('id', 'title', 'description', 'price', 'get_categories', 'amount', 'orders_num')
+    list_display = ('id', 'title', 'description', 'price', 'get_categories', 'amount', 'orders_num', 'get_first_img')
+    readonly_fields = ('get_first_img',)
     list_filter = (
         ('active', BooleanFieldListFilter),
         ('price', RangeNumericFilter)
@@ -69,11 +73,26 @@ class ProductAdmin(ModelAdmin):
 
     def get_categories(self, obj) -> SafeText:
         """
-
+        Retrieves parent categories and transforms them into a safe string (comma-separated)...
         :param obj:
         :return:
         """
         return mark_safe(", ".join([category.title for category in obj.categories.all()]))
+    get_categories.short_description = 'Categories'
+
+    def get_first_img(self, obj) -> Optional[SafeText]:
+        """
+        Tries to retrieve the first Product's image and transforms it into a safe [string] HTML-snippet...
+        :param obj:
+        :return: Either HTML-snippet with the image or None if there are no images in the field...
+        """
+        first_img = ProductImage.objects.filter(product_ref_id=obj.id).first()
+        if not first_img:
+            return None
+        thumb_width = 128 if first_img.image.width > 128 else first_img.image.width
+        thumb_height = 128 if first_img.image.height > 128 else first_img.image.height
+        return mark_safe(f'<img src="{first_img.image.url}" width="{thumb_width}" height="{thumb_height}"/>')
+    get_first_img.short_description = 'Cover'
 
     def has_add_permission(self, request, obj=None):
         return True
