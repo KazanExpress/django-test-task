@@ -67,7 +67,8 @@ class ProductAdmin(ModelAdmin):
     ✓ Attaches a product to one or more `categories`...
     """
     search_fields = ('id', 'title')
-    list_display = ('id', 'title', 'description', 'price', 'get_categories', 'amount', 'orders_num', 'get_first_img')
+    list_display = ('id', 'title', 'description', 'price', 'get_categories', 'amount', 'orders_num', 'get_first_img',
+                    'get_shops')
     readonly_fields = ('get_first_img',)
     list_filter = (
         ('active', BooleanFieldListFilter),
@@ -84,8 +85,9 @@ class ProductAdmin(ModelAdmin):
         :param obj:
         :return:
         """
-        return mark_safe(", ".join([category.title for category in obj.categories.all()]))
-    get_categories.short_description = 'Categories'
+        categories_titles = [category.title for category in obj.categories.all()]
+        return mark_safe(", ".join(categories_titles))
+    get_categories.short_description = "Categories"
 
     def get_first_img(self, obj) -> Optional[SafeText]:
         """
@@ -99,7 +101,12 @@ class ProductAdmin(ModelAdmin):
         thumb_width = IMG_DEFAULT_WIDTH if first_img.image.width > IMG_DEFAULT_WIDTH else first_img.image.width
         thumb_height = IMG_DEFAULT_HEIGHT if first_img.image.height > IMG_DEFAULT_HEIGHT else first_img.image.height
         return mark_safe(f"<img src=\"{first_img.image.url}\" width=\"{thumb_width}\" height=\"{thumb_height}\"/>")
-    get_first_img.short_description = 'Cover'
+    get_first_img.short_description = "Cover"
+
+    def get_shops(self, obj) -> Optional[SafeText]:
+        shops_titles = [category.title for category in obj.shops.all()]
+        return mark_safe(", ".join(shops_titles))
+    get_shops.short_description = "Available Shops"
 
     def has_add_permission(self, request, obj=None):
         return True
@@ -125,6 +132,7 @@ class CategoryAdmin(ModelAdmin):
 
     def get_parent_categories(self, obj) -> SafeText:
         return mark_safe(", ".join([category.title for category in obj.parent_category.all()]))
+    get_parent_categories.short_description = "Parents"
 
     def has_add_permission(self, request, obj=None):
         return True

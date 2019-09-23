@@ -12,6 +12,8 @@ class Shop(Model):
     title = CharField(max_length=126)
     description = TextField(validators=())
     image = ImageField(upload_to='shop_images/', null=True, blank=True, default=None)
+    product = ForeignKey(to='Product', on_delete=SET_NULL, related_name='shops', related_query_name='shop',
+                         null=True, blank=True)
 
     class Meta:
         db_table = 'shops'
@@ -33,8 +35,6 @@ class Product(Model):
     active = BooleanField()
     categories = ManyToManyField(to='Category', related_name='products', related_query_name='product',
                                  symmetrical=False)
-    shop = ForeignKey(to='Shop', on_delete=SET_NULL, related_name='products', related_query_name='product', null=True,
-                      blank=True)
 
     def __str__(self):
         return self.title
@@ -78,7 +78,7 @@ class Category(Model):
             'parents': self.parent_category.all()
         }
 
-    def get_paths_dfs(self, origin: 'Category'):
+    def _get_paths_dfs(self, origin: 'Category'):
         """
         Depth-First Search over `CATEGORIES_GRAPH`...
         Generator-like method...
@@ -111,10 +111,11 @@ class Category(Model):
                 CATEGORIES_GRAPH[cat] = cat.as_dict
         _refresh_graph()
 
-        paths_data = list(self.get_paths_dfs(self))
+        paths_data = list(self._get_paths_dfs(self))
         paths = ['.'.join(category.title for category in categories) for categories in paths_data]
 
         return mark_safe(f"<br>".join(paths))
+    get_paths.short_description = "Full Paths"
 
     class Meta:
         db_table = 'categories'
