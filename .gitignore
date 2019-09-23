@@ -10,3 +10,8 @@ __pycache__/
 # Python's virtual environemnt...
 venv/
 .venv
+
+# Media files...
+*.png
+*.jpg
+*.jpeg
