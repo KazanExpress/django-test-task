@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from django.db.models import Model, CharField, TextField, IntegerField, FloatField, BooleanField, ImageField, \
     ManyToManyField, ForeignKey, CASCADE, SET_NULL
@@ -12,8 +12,8 @@ class Shop(Model):
     title = CharField(max_length=126)
     description = TextField(validators=())
     image = ImageField(upload_to='shop_images/', null=True, blank=True, default=None)
-    product = ForeignKey(to='Product', on_delete=SET_NULL, related_name='shops', related_query_name='shop',
-                         null=True, blank=True)
+    products = ManyToManyField(to='Product', related_name='shops', related_query_name='shop', through='ShopProduct',
+                               symmetrical=False)
 
     class Meta:
         db_table = 'shops'
@@ -22,6 +22,15 @@ class Shop(Model):
 
     def __str__(self):
         return self.title
+
+
+class ShopProduct(Model):
+    """
+    Multiple products in multiple shops support...
+    Think of it as a view\an aggregation table...
+    """
+    shop = ForeignKey(to='Shop', on_delete=SET_NULL, null=True, related_name='products_n')
+    product = ForeignKey(to='Product', on_delete=SET_NULL, null=True, related_name='shops_n')
 
 
 class Product(Model):
@@ -34,8 +43,8 @@ class Product(Model):
     price = FloatField(default=0.0)
     orders_num = IntegerField(default=0)
     active = BooleanField()
-    categories = ManyToManyField(to='Category', related_name='products', related_query_name='product',
-                                 symmetrical=False)
+    categories = ManyToManyField(to='Category', related_name='products', related_query_name='product', symmetrical=False)
+    # shops = ManyToManyField(to='Shop', related_name='products', related_query_name='product', symmetrical=True)
 
     def __str__(self):
         return self.title
@@ -95,7 +104,7 @@ class Category(Model):
                 else:
                     stack.append((next, path + [next]))
 
-    def get_paths(self) -> SafeText:
+    def get_paths(self) -> Optional[SafeText]:
         """
         Iterates (DFS) over categories to extract the full hierarchy for the current category...
         :return: Stringified version of the extracted paths...
@@ -113,8 +122,10 @@ class Category(Model):
         _refresh_graph()
 
         paths_data = list(self._get_paths_dfs(self))
-        paths = ['.'.join(category.title for category in categories) for categories in paths_data]
+        if not paths_data:
+            return None
 
+        paths = ['.'.join(category.title for category in categories) for categories in paths_data]
         return mark_safe(f"<br>".join(paths))
     get_paths.short_description = "Full Paths"
 

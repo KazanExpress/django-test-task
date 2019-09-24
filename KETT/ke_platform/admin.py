@@ -12,6 +12,11 @@ IMG_DEFAULT_WIDTH = 128
 IMG_DEFAULT_HEIGHT = 128
 
 
+class ProductShopInline(TabularInline):
+    model = Shop.products.through
+    extra = 1
+
+
 class ProductImageInline(TabularInline):
     """
     For multiple images input support...
@@ -43,6 +48,8 @@ class ShopAdmin(ModelAdmin):
     search_fields = ('title',)
     list_display = ('id', 'title', 'description')
     empty_value_display = "NA"
+
+    inlines = [ProductShopInline]
 
     def has_add_permission(self, request, obj=None):
         return True
@@ -110,9 +117,12 @@ class ProductAdmin(ModelAdmin):
         :return: Either a comma-separated safe string with the retrieved shops' titles
                  or None if there are no images in the field...
         """
-        shops_titles = [category.title for category in obj.shops.all()]
-        if not shops_titles:
+        if not obj.shops:
             return None
+        shops = obj.shops.all()
+        if not shops:
+            return None
+        shops_titles = [shop.title for shop in shops]
         return mark_safe(", ".join(shops_titles))
     get_shops.short_description = "Available Shops"
 
