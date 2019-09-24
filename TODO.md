@@ -1,7 +1,7 @@
-- set-up PSQL
-- meet the requirements
-- wrap with Docker
-- add `unittest` (with contexts, mock-patches, etc.)
-- set-up ElasticSearch (probably, via dsl) support for queries
-- set-up RabbitMQ + Celery support
-- add PDF download for the celected items in `Shop` and `Product`
+- [x] set-up PSQL
+- [x] meet the requirements
+- [ ] wrap with Docker
+- [ ] add `unittest` (with contexts, mock-patches, etc.)
+- [ ] set-up ElasticSearch (probably, via dsl) support for queries
+- [ ] set-up RabbitMQ + Celery support
+- [ ] add PDF download for the celected items in `Shop` and `Product`
