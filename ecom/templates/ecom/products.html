@@ -1,0 +1,53 @@
+{% extends 'ecom/main.html' %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <button>
+        <a href=" {% url 'addproduct' %} ">Add New Product</a>
+    </button>
+{% endif %}
+
+<button>
+    <a href=" {% url 'product' %} ">All Products</a>
+</button>
+
+<button>
+    <a href=" {% url 'activeproduct' %} ">Active Products</a>
+</button>
+
+<button>
+    <a href=" {% url 'nonactiveProduct' %}  "> None Active Products </a>
+    
+</button>
+
+<div class="row">
+
+    {% for product in products %}
+    <div class="card" style="width: 18rem;">
+
+        {% for category in product.category.all %}
+            <h1>{{category}}</h1>
+        {% endfor %}
+
+        {% comment %} <h3> {{product.category.all}} </h3> {% endcomment %}
+        <p>id : {{product.id}} </p>
+        <img class="card-img-top" src="{{product.image.url}}" alt="{{product.id}}"  >
+        <div class="card-body">
+            <h3>Seller: {{product.shop}} </h3>
+            <p style="font-weight: bold;">Title: {{product.title}} </p>
+            <p class="card-text" style="font-weight: bold;" >Rs. {{product.amount}}</p>
+            <p> {{product.desc}} </p>
+            <p>Active: <span>{{product.active}}</span> </p>
+            <button>
+                <a href=" {% url 'editproduct' product.id %} ">Edit</a>
+            </button>
+        </div>
+      </div>
+    
+    {% endfor %}
+   
+</div>
+
+
+{% endblock content %}

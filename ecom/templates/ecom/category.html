@@ -1,0 +1,43 @@
+{% extends 'ecom/main.html' %}
+{% load static %}
+
+{% block content %}
+
+<button>
+    <a href=" {% url 'addparentcategory' %} ">Add Parent Category</a>
+</button>
+
+<button>
+    <a href=" {% url 'addcategory' %} ">
+        Add Category
+    </a>
+</button>
+<h1>
+    Categories List
+</h1>
+<div class="row">
+    {% for cat in category %}
+    <div class="card" style="width: 25rem;">
+
+        {% for p in cat.parent.all %}
+            <h2>Parent: {{p}}</h2> 
+        {% endfor %}
+
+        <h3>Category Title:  {{cat.title}} </h3>
+        <div class="card-body">
+            <h3>Seller: {{cat.shop}} </h3>
+            <p> {{cat.desc}} </p>
+        </div>
+        <button>
+            <a href=" {% url 'editcategory' cat.id %} ">Edit</a>
+        </button>
+
+      </div>
+    
+    {% endfor %}
+  
+   
+</div>
+
+
+{% endblock content %}
