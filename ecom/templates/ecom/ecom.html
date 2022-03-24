@@ -1,0 +1,33 @@
+{% extends 'ecom/main.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<button> <a href="{% url 'addshop' %}"> Add New shop</a></button>
+
+<div class="row">
+
+    {% comment %} shop {% endcomment %}
+
+    <h1>Shops List</h1>
+    {% for shop in shop %}
+    <div class="card" style="width: 18rem;">
+        <h3>Title: {{shop.title}} </h3>
+        <img class="card-img-top" src="{{shop.image.url}}" alt="{{shop.id}}"  >
+        <div class="card-body">
+            <p class="card-text" style="font-weight: bold;" >{{shop.desc}}</p>
+        </div>
+        <button>
+            <a href=" {% url 'editshop' shop.id %} ">Edit</a>
+        </button>
+        <br>
+      </div>
+    
+    {% endfor %}
+
+    
+</div>
+
+
+{% endblock content %}

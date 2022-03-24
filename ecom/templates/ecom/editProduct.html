@@ -1,0 +1,25 @@
+{% extends 'ecom/main.html' %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="card" style="width: 15rem;">
+        <img class="card-img-top" src="{{img.image.url}}"   >
+        <div class="card-body">
+            <form method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit" class="btn btn-primary btn-sm" value=""> Save</button>
+            </form>
+            
+        </div>
+      </div>
+
+      {% else %}
+
+      <h1> <a href=" {% url 'login' %} ">Please, Login</a> </h1>
+      
+
+
+{% endif %}
+{% endblock content %}
